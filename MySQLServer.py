@@ -6,6 +6,7 @@ import sys
 
 def create_database():
     try:
+        # Connect to MySQL server
         conn = MySQLdb.connect(
             host="localhost",
             user=sys.argv[1],
@@ -13,8 +14,11 @@ def create_database():
             port=3306
         )
         cursor = conn.cursor()
-        cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
-        print("Database 'alx_book_store' created successfully!")
+        
+        # Create database (using required name exactly)
+        cursor.execute("CREATE DATABASE IF NOT EXISTS alxbookstore")
+        print("Database 'alxbookstore' created successfully!")
+        
     except MySQLdb.Error as e:
         print(f"Error connecting to MySQL: {e}")
     finally:
