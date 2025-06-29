@@ -1,35 +1,28 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 """Create alxbookstore database"""
 
-import mysql.connector
+import MySQLdb
 import sys
 
 def create_database():
-    """Creates the alxbookstore database"""
     try:
-        # Establish connection without specifying a database
-        conn = mysql.connector.connect(
+        conn = MySQLdb.connect(
             host="localhost",
             user=sys.argv[1],
-            password=sys.argv[2]
+            passwd=sys.argv[2]
         )
-        
-        # Create cursor
         cursor = conn.cursor()
-        
-        # Create database (exact name as specified)
         cursor.execute("CREATE DATABASE IF NOT EXISTS alxbookstore")
-        print("Database 'alxbookstore' created successfully!")
-        
-    except mysql.connector.Error as err:
+        print("Database created successfully")
+    except MySQLdb.Error as err:
         print(f"Error: {err}")
     finally:
-        if 'conn' in locals() and conn.is_connected():
+        if 'conn' in locals():
             cursor.close()
             conn.close()
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python MySQLServer.py <mysql_username> <mysql_password>")
-    else:
-        create_database()
+        print("Usage: python MySQLServer.py <username> <password>")
+        sys.exit(1)
+    create_database()
