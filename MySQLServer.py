@@ -2,32 +2,31 @@
 """Create alxbookstore database"""
 
 import mysql.connector
-from mysql.connector import Error
 import sys
 
 def create_database():
+    """Creates the alxbookstore database"""
     try:
-        # Establish connection to MySQL server
-        connection = mysql.connector.connect(
+        # Establish connection without specifying a database
+        conn = mysql.connector.connect(
             host="localhost",
             user=sys.argv[1],
             password=sys.argv[2]
         )
         
-        if connection.is_connected():
-            cursor = connection.cursor()
-            
-            # Create database (using exact required name)
-            cursor.execute("CREATE DATABASE IF NOT EXISTS alxbookstore")
-            print("Database 'alxbookstore' created successfully!")
-            
-    except Error as e:
-        print(f"Error while connecting to MySQL: {e}")
+        # Create cursor
+        cursor = conn.cursor()
+        
+        # Create database (exact name as specified)
+        cursor.execute("CREATE DATABASE IF NOT EXISTS alxbookstore")
+        print("Database 'alxbookstore' created successfully!")
+        
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
     finally:
-        if 'connection' in locals() and connection.is_connected():
+        if 'conn' in locals() and conn.is_connected():
             cursor.close()
-            connection.close()
-            print("MySQL connection is closed")
+            conn.close()
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
